@@ -64,15 +64,15 @@ cd /root/windisk
 
 mkdir winfile
 
-wget -O wins.iso --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" https://bit.ly/3zOJiyE
+wget -O win10.iso --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" https://bit.ly/3zOJiyE
 
-mount -o loop wins.iso winfile
+mount -o loop win10.iso winfile
 
 rsync -avz --progress winfile/* /mnt
 
 umount winfile
 
-wget -O virtio.iso https://shorturl.at/lsOU3
+wget -O virtio.iso https://bit.ly/4d1g7Ht
 
 mount -o loop virtio.iso winfile
 
@@ -89,3 +89,4 @@ echo 'add virtio /virtio_drivers' >> cmd.txt
 wimlib-imagex update boot.wim 2 < cmd.txt
 
 reboot
+
