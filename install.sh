@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# Actualización e instalación de paquetes
-echo "Actualizando y mejorando el sistema..."
-apt update -y && apt upgrade -y || { echo "Error al actualizar el sistema"; exit 1; }
-sleep 2
-
 echo "Instalando grub2, wimtools y ntfs-3g..."
 apt install grub2 wimtools ntfs-3g -y || { echo "Error al instalar los paquetes necesarios"; exit 1; }
 sleep 2
@@ -23,26 +18,30 @@ sleep 2
 # Crear tabla de particiones GPT
 echo "Creando tabla de particiones GPT..."
 parted /dev/sda --script -- mklabel gpt || { echo "Error al crear la tabla GPT"; exit 1; }
+lsblk
 sleep 2
 
 # Crear particiones
 echo "Creando la primera partición..."
 parted /dev/sda --script -- mkpart primary ntfs 1MB ${part_size_mb}MB || { echo "Error al crear la primera partición"; exit 1; }
+lsblk 
 sleep 2
 
 echo "Creando la segunda partición..."
 parted /dev/sda --script -- mkpart primary ntfs ${part_size_mb}MB $((2 * part_size_mb))MB || { echo "Error al crear la segunda partición"; exit 1; }
+lsblk
 sleep 2
 
 # Informar al kernel de los cambios en la tabla de particiones
 echo "Informando al kernel sobre los cambios de partición..."
 partprobe /dev/sda
-sleep 5
+sleep 30
 partprobe /dev/sda
-sleep 5
+sleep 30
 partprobe /dev/sda
-sleep 5
+sleep 30
 
+lsblk
 # Verificar si las particiones están disponibles
 echo "Verificando la disponibilidad de las particiones..."
 while ! ls /dev/sda1; do
